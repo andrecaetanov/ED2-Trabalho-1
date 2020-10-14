@@ -12,6 +12,7 @@ int main()
     // Le o arquivo de entrada e guarda os valores de N em um array
     int arraySize;
     fstream inFile;
+    srand(time(NULL));
 
     inFile.open("entrada.txt");
     if (!inFile)
@@ -48,7 +49,7 @@ int main()
         for (int i = 0; i < 5; i++)
         {
             // Gera um numero aleatorio que representa a posicao no arquivo e salta para a proxima linha
-            srand(time(NULL));
+
             int randomChar = rand() % (lenght);
             dataset.seekg(randomChar);
             string unused;
@@ -56,6 +57,8 @@ int main()
 
             // Le o dataset e guarda N elementos em uma lista
             List<Book> *books = new List<Book>();
+            cout << "\n------------------------------Nova Lista------------------------------\n"
+                 << endl;
 
             for (int i = 0; i < n; i++)
             {
@@ -70,10 +73,9 @@ int main()
                 getline(dataset, book->ratingAvg, ',');
                 getline(dataset, book->ratingCount, ',');
                 getline(dataset, book->title);
-                cout << book->title << endl;
+                cout << i + 1 << ": " << book->title << endl;
                 books->insert(book);
             }
-
             dataset.seekg(0, dataset.beg);
         }
     }
