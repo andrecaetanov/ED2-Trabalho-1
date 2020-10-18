@@ -7,12 +7,63 @@
 
 using namespace std;
 
+void readAttribute(string *line, string *attribute, size_t *position)
+{
+    size_t firstDelimiter = line->find("\"", *position);
+    size_t secondDelimiter = line->find("\",", firstDelimiter);
+
+    if (secondDelimiter == string::npos)
+    {
+        secondDelimiter = line->find("\"", firstDelimiter + 1);
+    }
+
+    *attribute = line->substr(firstDelimiter + 1, secondDelimiter - firstDelimiter - 1);
+    *position = secondDelimiter + 1;
+}
+
+void readDataset(fstream *dataset, List<Book> *books, unsigned int datasetLenght, unsigned int listSize)
+{
+    for (int i = 0; i < listSize; i++)
+    {
+        Book *book = new Book();
+
+        // Gera um numero aleatorio que representa a posicao no arquivo e salta para a proxima linha
+        int randomChar = rand() % (datasetLenght);
+        dataset->seekg(randomChar);
+        string unused;
+        getline(*dataset, unused);
+
+        // Le uma linha e separa os valores em atributos do livro
+        string line;
+        getline(*dataset, line);
+
+        size_t lastPosition = 0;
+        readAttribute(&line, &book->authors, &lastPosition);
+        readAttribute(&line, &book->bestsellersRank, &lastPosition);
+        readAttribute(&line, &book->categories, &lastPosition);
+        readAttribute(&line, &book->edition, &lastPosition);
+        readAttribute(&line, &book->id, &lastPosition);
+        readAttribute(&line, &book->isbn10, &lastPosition);
+        readAttribute(&line, &book->isbn13, &lastPosition);
+        readAttribute(&line, &book->ratingAvg, &lastPosition);
+        readAttribute(&line, &book->ratingCount, &lastPosition);
+        readAttribute(&line, &book->title, &lastPosition);
+
+        cout << i + 1 << ": " << book->title << endl;
+        books->insert(book);
+    }
+
+    // Retorna para o início do arquivo
+    // dataset->seekg(0, dataset->beg);
+}
+
 int main()
 {
-    // Le o arquivo de entrada e guarda os valores de N em um array
-    int arraySize;
-    fstream inFile;
     srand(time(NULL));
+
+    // Le o arquivo de entrada e guarda os valores de N em um array
+    fstream inFile;
+    int arraySize;
 
     inFile.open("entrada.txt");
     if (!inFile)
@@ -40,43 +91,17 @@ int main()
     }
 
     dataset.seekg(0, dataset.end);
-    int lenght = dataset.tellg();
+    unsigned int lenght = dataset.tellg();
     dataset.seekg(0, dataset.beg);
 
-    // Execute
+    // Execução
     for (int n : nArray)
     {
         for (int i = 0; i < 5; i++)
         {
-            // Gera um numero aleatorio que representa a posicao no arquivo e salta para a proxima linha
-
-            int randomChar = rand() % (lenght);
-            dataset.seekg(randomChar);
-            string unused;
-            getline(dataset, unused);
-
             // Le o dataset e guarda N elementos em uma lista
             List<Book> *books = new List<Book>();
-            cout << "\n------------------------------Nova Lista------------------------------\n"
-                 << endl;
-
-            for (int i = 0; i < n; i++)
-            {
-                Book *book = new Book();
-                getline(dataset, book->authors, ',');
-                getline(dataset, book->bestsellersRank, ',');
-                getline(dataset, book->categories, ',');
-                getline(dataset, book->edition, ',');
-                getline(dataset, book->id, ',');
-                getline(dataset, book->isbn10, ',');
-                getline(dataset, book->isbn13, ',');
-                getline(dataset, book->ratingAvg, ',');
-                getline(dataset, book->ratingCount, ',');
-                getline(dataset, book->title);
-                cout << i + 1 << ": " << book->title << endl;
-                books->insert(book);
-            }
-            dataset.seekg(0, dataset.beg);
+            readDataset(&dataset, books, lenght, n);
         }
     }
 
