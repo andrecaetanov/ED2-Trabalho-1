@@ -6,7 +6,6 @@ void QuickSort::swap(Book *bookA, Book *bookB)
     Book temp = *bookA;
     *bookA = *bookB;
     *bookB = temp;
-    //numSwaps++;
 }
 
 int QuickSort::partition(vector<Book> *books, int begin, int end)
@@ -22,7 +21,6 @@ int QuickSort::partition(vector<Book> *books, int begin, int end)
     {
         if (books->at(j).title < pivot.title)
         {
-            //numComparisons++;
             i++;
             swap(&books->at(i), &books->at(j));
         }
@@ -42,13 +40,3 @@ void QuickSort::sort(vector<Book> *books, int begin, int end)
         sort(books, pi + 1, end);
     }
 }
-
-// int QuickSort::getNumComparisons()
-// {
-//     return numComparisons;
-// }
-
-// int QuickSort::getNumSwaps()
-// {
-//     return numSwaps;
-// }

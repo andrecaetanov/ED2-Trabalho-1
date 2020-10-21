@@ -73,6 +73,7 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
     }
     cout << endl;
 
+    SelectionSort sorting;
     SelectionSort::sort(booksCopy);
     cout << "Lista ordenada com SelectionSort:" << endl;
     for (int i = 0; i < booksCopy->size(); i++)
