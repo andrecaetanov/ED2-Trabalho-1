@@ -58,20 +58,26 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
     }
     cout << endl;
 
-    //Comentei quicksort para testes
-    // QuickSort::sort(books, 0, books->size() - 1);
-    // cout << "Lista ordenada com QuickSort:" << endl;
-    // for (int i = 0; i < books->size(); i++)
-    // {
-    //     cout << i + 1 << ": " << books->at(i).title << endl;
-    // }
-    // cout << endl;
+    //Copia vetor inicial para utilizar elementos no SelectionSort
+    vector<Book> *booksCopy = new vector<Book>;
+    for (int i = 0; i < books->size(); i++)
+    {
+        booksCopy->push_back(books->at(i));
+    }
 
-    SelectionSort::sort(books);
-    cout << "Lista ordenada com SelectionSort:" << endl;
+    QuickSort::sort(books, 0, books->size() - 1);
+    cout << "Lista ordenada com QuickSort:" << endl;
     for (int i = 0; i < books->size(); i++)
     {
         cout << i + 1 << ": " << books->at(i).title << endl;
+    }
+    cout << endl;
+
+    SelectionSort::sort(booksCopy);
+    cout << "Lista ordenada com SelectionSort:" << endl;
+    for (int i = 0; i < booksCopy->size(); i++)
+    {
+        cout << i + 1 << ": " << booksCopy->at(i).title << endl;
     }
     cout << endl;
 }
