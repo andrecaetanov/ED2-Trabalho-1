@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "quick_sort.h"
+#include "selection_sort.h"
 
 #define NUMBER_ARRAYS 1
 
@@ -25,6 +26,7 @@ void readAttribute(string *line, string *attribute, size_t *position)
 
 void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLenght, unsigned int listSize)
 {
+    cout << "Lista Desordenada" << endl;
     for (int i = 0; i < listSize; i++)
     {
         Book book;
@@ -56,8 +58,17 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
     }
     cout << endl;
 
-    QuickSort::sort(books, 0, books->size() - 1);
-    cout << "Lista ordenada:" << endl;
+    //Comentei quicksort para testes
+    // QuickSort::sort(books, 0, books->size() - 1);
+    // cout << "Lista ordenada com QuickSort:" << endl;
+    // for (int i = 0; i < books->size(); i++)
+    // {
+    //     cout << i + 1 << ": " << books->at(i).title << endl;
+    // }
+    // cout << endl;
+
+    SelectionSort::sort(books);
+    cout << "Lista ordenada com SelectionSort:" << endl;
     for (int i = 0; i < books->size(); i++)
     {
         cout << i + 1 << ": " << books->at(i).title << endl;
