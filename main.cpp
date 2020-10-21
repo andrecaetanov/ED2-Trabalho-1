@@ -1,9 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
+#include <vector>
 
-#include "book.h"
-#include "list.h"
+#include "quick_sort.h"
+
+#define NUMBER_ARRAYS 1
 
 using namespace std;
 
@@ -21,11 +23,11 @@ void readAttribute(string *line, string *attribute, size_t *position)
     *position = secondDelimiter + 1;
 }
 
-void readDataset(fstream *dataset, List<Book> *books, unsigned int datasetLenght, unsigned int listSize)
+void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLenght, unsigned int listSize)
 {
     for (int i = 0; i < listSize; i++)
     {
-        Book *book = new Book();
+        Book book;
 
         // Gera um numero aleatorio que representa a posicao no arquivo e salta para a proxima linha
         int randomChar = rand() % (datasetLenght);
@@ -38,23 +40,29 @@ void readDataset(fstream *dataset, List<Book> *books, unsigned int datasetLenght
         getline(*dataset, line);
 
         size_t lastPosition = 0;
-        readAttribute(&line, &book->authors, &lastPosition);
-        readAttribute(&line, &book->bestsellersRank, &lastPosition);
-        readAttribute(&line, &book->categories, &lastPosition);
-        readAttribute(&line, &book->edition, &lastPosition);
-        readAttribute(&line, &book->id, &lastPosition);
-        readAttribute(&line, &book->isbn10, &lastPosition);
-        readAttribute(&line, &book->isbn13, &lastPosition);
-        readAttribute(&line, &book->ratingAvg, &lastPosition);
-        readAttribute(&line, &book->ratingCount, &lastPosition);
-        readAttribute(&line, &book->title, &lastPosition);
+        readAttribute(&line, &book.authors, &lastPosition);
+        readAttribute(&line, &book.bestsellersRank, &lastPosition);
+        readAttribute(&line, &book.categories, &lastPosition);
+        readAttribute(&line, &book.edition, &lastPosition);
+        readAttribute(&line, &book.id, &lastPosition);
+        readAttribute(&line, &book.isbn10, &lastPosition);
+        readAttribute(&line, &book.isbn13, &lastPosition);
+        readAttribute(&line, &book.ratingAvg, &lastPosition);
+        readAttribute(&line, &book.ratingCount, &lastPosition);
+        readAttribute(&line, &book.title, &lastPosition);
 
-        cout << i + 1 << ": " << book->title << endl;
-        books->insert(book);
+        cout << i + 1 << ": " << book.title << endl;
+        books->push_back(book);
     }
+    cout << endl;
 
-    // Retorna para o início do arquivo
-    // dataset->seekg(0, dataset->beg);
+    QuickSort::sort(books, 0, books->size() - 1);
+    cout << "Lista ordenada:" << endl;
+    for (int i = 0; i < books->size(); i++)
+    {
+        cout << i + 1 << ": " << books->at(i).title << endl;
+    }
+    cout << endl;
 }
 
 int main()
@@ -97,11 +105,11 @@ int main()
     // Execução
     for (int n : nArray)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < NUMBER_ARRAYS; i++)
         {
             // Le o dataset e guarda N elementos em uma lista
-            List<Book> *books = new List<Book>();
-            readDataset(&dataset, books, lenght, n);
+            vector<Book> books;
+            readDataset(&dataset, &books, lenght, n);
         }
     }
 
