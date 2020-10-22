@@ -10,6 +10,11 @@
 
 using namespace std;
 
+//TODO: Implementar contador de swaps e comparações
+//TODO: Implementar contador de duração dos algoritmos
+//TODO: Gerar arquivo de saída com estatísicas de cada lista e média da duração total para cada tamanho
+//TODO: Escreve relatório
+
 void readAttribute(string *line, string *attribute, size_t *position)
 {
     size_t firstDelimiter = line->find("\"", *position);
