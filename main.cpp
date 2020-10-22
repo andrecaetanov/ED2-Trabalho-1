@@ -2,6 +2,7 @@
 #include <fstream>
 #include <time.h>
 #include <vector>
+#include <chrono>
 
 #include "quick_sort.h"
 #include "selection_sort.h"
@@ -11,7 +12,6 @@
 using namespace std;
 
 //TODO: Implementar contador de swaps e comparações
-//TODO: Implementar contador de duração dos algoritmos
 //TODO: Gerar arquivo de saída com estatísicas de cada lista e média da duração total para cada tamanho
 //TODO: Escreve relatório
 
@@ -62,7 +62,10 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
         books->push_back(book);
     }
     cout << endl;
+}
 
+void executeSorting(vector<Book> *books, vector<double> *quickSortDurations, vector<double> *selectionSortDurations)
+{
     //Copia vetor inicial para utilizar elementos no SelectionSort
     vector<Book> *booksCopy = new vector<Book>;
     for (int i = 0; i < books->size(); i++)
@@ -70,6 +73,8 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
         booksCopy->push_back(books->at(i));
     }
 
+    //QuickSort
+    auto start = chrono::steady_clock::now();
     QuickSort::sort(books, 0, books->size() - 1);
     cout << "Lista ordenada com QuickSort:" << endl;
     for (int i = 0; i < books->size(); i++)
@@ -77,14 +82,25 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
         cout << i + 1 << ": " << books->at(i).title << endl;
     }
     cout << endl;
+    auto end = chrono::steady_clock::now();
+    chrono::duration<double> totalDuration = end - start;
+    quickSortDurations->push_back(totalDuration.count());
+    cout << "Duracao QuickSort: " << totalDuration.count() << "s" << std::endl;
+    cout << endl;
 
-    SelectionSort sorting;
+    //SelectionSort
+    start = chrono::steady_clock::now();
     SelectionSort::sort(booksCopy);
     cout << "Lista ordenada com SelectionSort:" << endl;
     for (int i = 0; i < booksCopy->size(); i++)
     {
         cout << i + 1 << ": " << booksCopy->at(i).title << endl;
     }
+    cout << endl;
+    end = chrono::steady_clock::now();
+    totalDuration = end - start;
+    selectionSortDurations->push_back(totalDuration.count());
+    cout << "Duracao SelectionSort: " << totalDuration.count() << "s" << std::endl;
     cout << endl;
 }
 
@@ -125,15 +141,50 @@ int main()
     unsigned int lenght = dataset.tellg();
     dataset.seekg(0, dataset.beg);
 
+    //cria listas de durações médias, comparações e trocas
+    double quickSortDurationAverage[arraySize];
+    double selectionSortDurationAverage[arraySize];
+    int quickSortComparisonsAverage[arraySize];
+    int selectionSortComparisonsAverage[arraySize];
+    int quickSortSwapsAverage[arraySize];
+    int selectionSortSwapsAverage[arraySize];
+
     // Execução
-    for (int n : nArray)
+    for (int i = 0; i < arraySize; i++)
     {
-        for (int i = 0; i < NUMBER_ARRAYS; i++)
+        vector<double> quickSortDurations;
+        vector<double> selectionSortDurations;
+
+        for (int j = 0; j < NUMBER_ARRAYS; j++)
         {
             // Le o dataset e guarda N elementos em uma lista
+            int n = nArray[i];
             vector<Book> books;
             readDataset(&dataset, &books, lenght, n);
+            executeSorting(&books, &quickSortDurations, &selectionSortDurations);
         }
+
+        //Calcula a media e insiro no vector
+        double averageQuick = 0;
+        double averageSelection = 0;
+        for (int j = 0; j < NUMBER_ARRAYS; j++)
+        {
+            averageQuick += quickSortDurations.at(j);
+            averageSelection += selectionSortDurations.at(j);
+        }
+        averageQuick = averageQuick / NUMBER_ARRAYS;
+        averageSelection = averageSelection / NUMBER_ARRAYS;
+        quickSortDurationAverage[i] = averageQuick;
+        selectionSortDurationAverage[i] = averageSelection;
+    }
+
+    cout << endl;
+
+    //imprime duracao media para cada tamanho de lista
+    for (int i = 0; i < arraySize; i++)
+    {
+        cout << "Quick Sort " << nArray[i] << " livros: " << quickSortDurationAverage.at(i) << "s " << endl;
+        cout << "Selection Sort " << nArray[i] << " livros: " << selectionSortDurationAverage.at(i) << "s " << endl;
     }
 
     inFile.close();
