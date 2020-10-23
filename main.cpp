@@ -15,7 +15,7 @@
 using namespace std;
 
 //TODO: Gerar arquivo de saída com estatísicas de cada lista e média da duração total para cada tamanho
-//TODO: Escreve relatório
+//TODO: Inserir conclusão no relatorio
 
 void readAttribute(string *line, string *attribute, size_t *position)
 {
