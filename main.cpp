@@ -8,7 +8,7 @@
 #include "selection_sort.h"
 #include "sorting_stats.h"
 
-#define NUMBER_ARRAYS 1
+#define NUMBER_ARRAYS 5
 #define QUICK_SORT 1
 #define SELECTION_SORT 2
 
@@ -33,7 +33,7 @@ void readAttribute(string *line, string *attribute, size_t *position)
 
 void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLenght, unsigned int listSize)
 {
-    cout << "Lista Desordenada" << endl;
+    //cout << "Lista Desordenada" << endl;
     for (int i = 0; i < listSize; i++)
     {
         Book book;
@@ -60,7 +60,7 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
         readAttribute(&line, &book.ratingCount, &lastPosition);
         readAttribute(&line, &book.title, &lastPosition);
 
-        cout << i + 1 << ": " << book.title << endl;
+        //cout << i + 1 << ": " << book.title << endl;
         books->push_back(book);
     }
     cout << endl;
@@ -73,16 +73,22 @@ void sort(vector<Book> *books, SortingStats *stats, int type)
 
     auto start = chrono::steady_clock::now();
 
+    cout << endl;
+
     if (type == SELECTION_SORT)
     {
         cout << "Lista ordenada com SelectionSort:" << endl;
         SelectionSort::sort(books, &swaps, &comparisons);
+        cout << endl;
     }
     else
     {
         cout << "Lista ordenada com QuickSort:" << endl;
         QuickSort::sort(books, 0, books->size() - 1, &swaps, &comparisons);
+        cout << endl;
     }
+
+    cout << endl;
 
     auto end = chrono::steady_clock::now();
 
@@ -91,7 +97,12 @@ void sort(vector<Book> *books, SortingStats *stats, int type)
     {
         cout << i + 1 << ": " << books->at(i).title << endl;
     }
+
     cout << endl;
+
+    chrono::duration<double> totalDuration = end - start;
+    stats->durations.push_back(totalDuration.count());
+    cout << "Duracao: " << totalDuration.count() << "s" << endl;
 
     stats->swaps.push_back(swaps);
     cout << "Numero de copias de registro: " << swaps << endl;
@@ -99,9 +110,6 @@ void sort(vector<Book> *books, SortingStats *stats, int type)
     stats->comparisons.push_back(comparisons);
     cout << "Numero de comparacoes: " << comparisons << endl;
 
-    chrono::duration<double> totalDuration = end - start;
-    stats->durations.push_back(totalDuration.count());
-    cout << "Duracao: " << totalDuration.count() << "s" << endl;
     cout << endl;
 }
 

@@ -10,6 +10,7 @@ void SelectionSort::swap(Book *bookA, Book *bookB)
 void SelectionSort::sort(vector<Book> *books, int *swaps, int *comparisons)
 {
     int min;
+
     for (int i = 0; i < books->size(); i++)
     {
         min = i;
@@ -17,15 +18,15 @@ void SelectionSort::sort(vector<Book> *books, int *swaps, int *comparisons)
         {
             if (books->at(j).title < books->at(min).title)
             {
-                comparisons++;
+                *comparisons = *comparisons + 1;
                 min = j;
             }
         }
         if (books->at(i).title >= books->at(min).title)
         {
-            comparisons++;
+            *comparisons = *comparisons + 1;
             swap(&books->at(i), &books->at(min));
-            swaps++;
+            *swaps = *swaps + 1;
         }
     }
 }

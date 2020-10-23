@@ -23,13 +23,13 @@ int QuickSort::partition(vector<Book> *books, int begin, int end, int *swaps, in
         {
             i++;
             swap(&books->at(i), &books->at(j));
-            swaps++;
-            comparisons++;
+            *swaps = *swaps + 1;
+            *comparisons = *comparisons + 1;
         }
     }
 
     swap(&books->at(i + 1), &books->at(end));
-    swaps++;
+    *swaps = *swaps + 1;
 
     return i + 1;
 }
