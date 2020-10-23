@@ -1,4 +1,5 @@
 #include <vector>
+#include <fstream>
 #pragma once
 
 using namespace std;
@@ -15,5 +16,5 @@ public:
     vector<int> swapsAverages;
     void clear();
     void calcAverages();
-    void print(int index);
+    void print(int index, ofstream *outFile);
 };

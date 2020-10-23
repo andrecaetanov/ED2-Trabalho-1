@@ -33,16 +33,16 @@ void readAttribute(string *line, string *attribute, size_t *position)
 
 void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLenght, unsigned int listSize)
 {
-    //cout << "Lista Desordenada" << endl;
+    // Gera um numero aleatorio que representa a posicao no arquivo e salta para a proxima linha
+    int randomPos = rand() % (datasetLenght);
+    dataset->seekg(randomPos);
+    string unused;
+    getline(*dataset, unused);
+
+    cout << "Lista desordenada:" << endl;
     for (int i = 0; i < listSize; i++)
     {
         Book book;
-
-        // Gera um numero aleatorio que representa a posicao no arquivo e salta para a proxima linha
-        int randomChar = rand() % (datasetLenght);
-        dataset->seekg(randomChar);
-        string unused;
-        getline(*dataset, unused);
 
         // Le uma linha e separa os valores em atributos do livro
         string line;
@@ -60,14 +60,18 @@ void readDataset(fstream *dataset, vector<Book> *books, unsigned int datasetLeng
         readAttribute(&line, &book.ratingCount, &lastPosition);
         readAttribute(&line, &book.title, &lastPosition);
 
-        //cout << i + 1 << ": " << book.title << endl;
+        cout << i + 1 << ": " << book.title << endl;
         books->push_back(book);
     }
+
+    dataset->seekg(0, dataset->beg);
     cout << endl;
 }
 
 void sort(vector<Book> *books, SortingStats *stats, int type)
 {
+    srand(time(NULL));
+
     int swaps = 0;
     int comparisons = 0;
 
@@ -102,7 +106,7 @@ void sort(vector<Book> *books, SortingStats *stats, int type)
 
     chrono::duration<double> totalDuration = end - start;
     stats->durations.push_back(totalDuration.count());
-    cout << "Duracao: " << totalDuration.count() << "s" << endl;
+    cout << "Tempo de duracao de execucao: " << totalDuration.count() << "s" << endl;
 
     stats->swaps.push_back(swaps);
     cout << "Numero de copias de registro: " << swaps << endl;
@@ -115,10 +119,9 @@ void sort(vector<Book> *books, SortingStats *stats, int type)
 
 int main()
 {
-    srand(time(NULL));
-
     // Le o arquivo de entrada e guarda os valores de N em um array
     fstream inFile;
+    ofstream outFile;
     int arraySize;
 
     inFile.open("entrada.txt");
@@ -136,6 +139,8 @@ int main()
         inFile >> nArray[i];
     }
 
+    inFile.close();
+
     // Abre o dataset e guarda o tamanho do arquivo em bytes
     fstream dataset;
 
@@ -147,7 +152,7 @@ int main()
     }
 
     dataset.seekg(0, dataset.end);
-    unsigned int lenght = dataset.tellg();
+    unsigned long long int lenght = dataset.tellg();
     dataset.seekg(0, dataset.beg);
 
     // Cria objetos para armazenar estatísticas de desempenho dos algoritmos de ordenação
@@ -187,19 +192,28 @@ int main()
 
     cout << endl;
 
-    // Imprime as estatisticas de desempenho
+    dataset.close();
+
+    // Imprime no prompt e registra no arquivo de saida as estatisticas de desempenho
+    outFile.open("saida.txt");
+
+    cout << "Estatisticas gerais" << endl;
+    cout << endl;
+    outFile << "Estatisticas gerais" << endl;
+    outFile << endl;
+
     for (int i = 0; i < arraySize; i++)
     {
         cout << "Quick Sort " << nArray[i] << " livros: " << endl;
-        quickSortStats->print(i);
-
-        cout << endl;
+        outFile << "Quick Sort " << nArray[i] << " livros: " << endl;
+        quickSortStats->print(i, &outFile);
 
         cout << "Selection Sort " << nArray[i] << " livros: " << endl;
-        selectionSortStats->print(i);
+        outFile << "Selection Sort " << nArray[i] << " livros: " << endl;
+        selectionSortStats->print(i, &outFile);
     }
 
-    inFile.close();
-    dataset.close();
+    outFile.close();
+
     return 0;
 }

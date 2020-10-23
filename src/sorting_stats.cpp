@@ -34,10 +34,15 @@ void SortingStats::calcAverages()
     comparisonsAverages.push_back(comparisonsAverage);
 }
 
-void SortingStats::print(int index)
+void SortingStats::print(int index, ofstream *outFile)
 {
-    cout << "Tempo medio de duracao: " << durationsAverages.at(index) << "s " << endl;
+    cout << "Tempo medio de duracao de execucao: " << durationsAverages.at(index) << "s " << endl;
     cout << "Numero medio de copias de registro: " << swapsAverages.at(index) << endl;
     cout << "Numero medio de comparacoes: " << comparisonsAverages.at(index) << endl;
     cout << endl;
+
+    *outFile << "Tempo medio de duracao de execucao: " << durationsAverages.at(index) << "s " << endl;
+    *outFile << "Numero medio de copias de registro: " << swapsAverages.at(index) << endl;
+    *outFile << "Numero medio de comparacoes: " << comparisonsAverages.at(index) << endl;
+    *outFile << endl;
 }
