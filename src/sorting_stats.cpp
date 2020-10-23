@@ -1,0 +1,43 @@
+#include "sorting_stats.h"
+#include <iostream>
+
+SortingStats::SortingStats()
+{
+}
+
+void SortingStats::clear()
+{
+    durations.clear();
+    comparisons.clear();
+    swaps.clear();
+}
+
+void SortingStats::calcAverages()
+{
+    double durationsAverage = 0;
+    double swapsAverage = 0;
+    double comparisonsAverage = 0;
+
+    for (int i = 0; i < durations.size(); i++)
+    {
+        durationsAverage += durations.at(i);
+        swapsAverage += swaps.at(i);
+        comparisonsAverage += comparisons.at(i);
+    }
+
+    durationsAverage = durationsAverage / durations.size();
+    swapsAverage = swapsAverage / durations.size();
+    comparisonsAverage = comparisonsAverage / durations.size();
+
+    durationsAverages.push_back(durationsAverage);
+    swapsAverages.push_back(swapsAverage);
+    comparisonsAverages.push_back(comparisonsAverage);
+}
+
+void SortingStats::print(int index)
+{
+    cout << "Tempo medio de duracao: " << durationsAverages.at(index) << "s " << endl;
+    cout << "Numero medio de copias de registro: " << swapsAverages.at(index) << endl;
+    cout << "Numero medio de comparacoes: " << comparisonsAverages.at(index) << endl;
+    cout << endl;
+}
