@@ -1,9 +1,6 @@
 #include <iostream>
-#include <fstream>
-#include <time.h>
-#include <vector>
-#include <chrono>
 #include "sorting_service.h"
+#include "hash_service.h"
 
 using namespace std;
 
@@ -18,6 +15,7 @@ void menu()
     cout << endl;
     cout << "Digite o valor da atividade que deseja realizar: " << endl;
     cin >> menuOption;
+    cout << endl;
 
     switch (menuOption)
     {
@@ -25,7 +23,7 @@ void menu()
         SortingService::execute();
         break;
     case 2:
-        //hashTable();
+        HashService::execute();
         break;
     case 3:
         //trees();

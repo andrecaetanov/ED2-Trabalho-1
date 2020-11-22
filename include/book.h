@@ -1,17 +1,18 @@
 #include <iostream>
+#include <vector>
+#include "entity.h"
 #pragma once
 
 using namespace std;
 
-class Book
+class Book : public Entity
 {
 public:
     Book();
-    string authors;
+    vector<int> authors;
     string bestsellersRank;
     string categories;
     string edition;
-    string id;
     string isbn10;
     string isbn13;
     string ratingAvg;
