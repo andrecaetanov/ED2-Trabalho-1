@@ -1,6 +1,7 @@
 #include <iostream>
 #include "sorting_service.h"
 #include "hash_service.h"
+#include "search_trees_service.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void menu()
         HashService::execute();
         break;
     case 3:
-        //trees();
+        TreeService::execute();
         break;
     default:
         cout << "Valor invalido inserido." << endl;
