@@ -1,9 +1,10 @@
-#include <vector>
+#include "list.h"
 #include "entity.h"
 #pragma once
 
 using namespace std;
 
+template <typename T>
 class Hash
 {
 private:
@@ -11,9 +12,12 @@ private:
     int hashFunction(unsigned long long int k);
 
 public:
-    Hash(int size);
-    vector<vector<Entity>> entries;
-    void insert(Entity *data);
+    Hash();
+    List<T> **entries;
+    int getSize();
+    void create(int size);
+    void insert(T *data);
+    T *search(int id);
     void read();
     void destroy();
 };

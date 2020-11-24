@@ -31,7 +31,7 @@ void SortingService::sort(vector<Book> *books, SortingStats *stats, int type)
     else
     {
         cout << "Lista ordenada com QuickSort:" << endl;
-        QuickSort::sort(books, 0, books->size() - 1, &swaps, &comparisons);
+        QuickSort<Book>::sort(books, 0, books->size() - 1, &swaps, &comparisons);
         cout << endl;
     }
 

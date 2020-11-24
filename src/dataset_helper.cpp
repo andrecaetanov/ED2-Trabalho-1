@@ -7,7 +7,7 @@ void DatasetHelper::readDatasetVector(vector<Book> *books, unsigned int size)
 {
     fstream dataset;
 
-    openDataset(&dataset);
+    openDataset(&dataset, "dataset.csv");
     setRandomPosition(&dataset);
 
     cout << "Lista desordenada:" << endl;
@@ -23,26 +23,59 @@ void DatasetHelper::readDatasetVector(vector<Book> *books, unsigned int size)
     dataset.close();
 }
 
-void DatasetHelper::readDatasetHash(Hash *hash, unsigned int size)
+void DatasetHelper::readDatasetHash(Hash<Book> *booksHash, Hash<Author> *authorsHash, vector<Author> *authorsVector, unsigned int size)
 {
-    fstream dataset;
+    fstream booksDataset;
+    fstream authorsDataset;
 
-    openDataset(&dataset);
-    setRandomPosition(&dataset);
+    openDataset(&booksDataset, "dataset.csv");
+    setRandomPosition(&booksDataset);
 
+    // Le o dataset e insere os N livros na hash
+    cout << "Lendo o dataset de livros e inserindo N livros em uma hash..." << endl;
     for (int i = 0; i < size; i++)
     {
-        Book *book = readBooksDatasetLine(&dataset);
-        hash->insert(book);
+        Book *book = readBooksDatasetLine(&booksDataset);
+        booksHash->insert(book);
+
+        for (int authorId : book->authors)
+        {
+            Author *author = new Author();
+            author->id = authorId;
+            authorsHash->insert(author);
+        }
     }
 
-    dataset.seekg(0, dataset.beg);
-    dataset.close();
+    openDataset(&authorsDataset, "authors-dataset.csv");
+
+    // Salta a primeira linha do dataset
+    string line;
+    getline(authorsDataset, line);
+
+    cout << "Lendo o dataset de autores e salvando os nomes dos autores dos livros em uma hash..." << endl;
+    while (!authorsDataset.eof())
+    {
+        unsigned long long int authorId;
+        size_t lastPosition = 0;
+
+        getline(authorsDataset, line);
+        readIntAttribute(&line, &authorId, &lastPosition);
+
+        Author *author = authorsHash->search(authorId);
+        if (author != NULL)
+        {
+            readStringAttribute(&line, &author->name, &lastPosition);
+            authorsVector->push_back(*author);
+        }
+    }
+
+    booksDataset.close();
+    authorsDataset.close();
 }
 
-void DatasetHelper::openDataset(fstream *dataset)
+void DatasetHelper::openDataset(fstream *dataset, string fileName)
 {
-    dataset->open("dataset.csv");
+    dataset->open(fileName);
     if (!dataset)
     {
         cout << "Nao foi possivel abrir o dataset." << endl;
