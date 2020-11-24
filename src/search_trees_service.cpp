@@ -29,6 +29,7 @@ void TreeService::execute()
 {
     //Leitura do arquivo de entrada
     fstream inFile;
+    ofstream outFile;
     int arraySize;
 
     cout << "Abrindo arquivo de entrada:" << endl;
@@ -40,7 +41,7 @@ void TreeService::execute()
         inFile.close();
         exit(0);
     }
-
+    // monta o vetor do tamanho das árvores
     inFile >> arraySize;
     int nArray[arraySize] = {0};
     for (int i = 0; i < arraySize; i++)
@@ -50,8 +51,10 @@ void TreeService::execute()
 
     inFile.close();
 
+    //instacia o objeto de estatísticas
     TreesStats *rbStats = new TreesStats();
 
+    //realizo a inserção e busca do trabalho
     for (int i = 0; i < arraySize; i++)
     {
         for (int j = 0; j < NUMBER_OF_TREES; j++)
@@ -71,5 +74,24 @@ void TreeService::execute()
         }
         rbStats->calcAverages();
         rbStats->clear();
+    }
+
+    cout << endl;
+
+    //garantir que ta funcionando os stats
+    //fazer o output file
+    // Imprime no prompt e registra no arquivo de saida as estatisticas de desempenho
+    outFile.open("saidaTree.txt");
+
+    cout << "Estatisticas gerais" << endl;
+    cout << endl;
+    outFile << "Estatisticas gerais" << endl;
+    outFile << endl;
+
+    for (int i = 0; i < arraySize; i++)
+    {
+        cout << "Arvore Vermelha-Preta - " << nArray[i] << " chaves: " << endl;
+        outFile << "QArvore Vermelha-Preta - " << nArray[i] << " chaves: " << endl;
+        rbStats->print(i, &outFile);
     }
 }

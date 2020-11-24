@@ -48,14 +48,14 @@ void TreesStats::print(int index, ofstream *outFile)
 {
     cout << "Tempo medio de duracao de execucao da insercao: " << insertionDurationsAverages.at(index) << "s " << endl;
     cout << "Tempo medio de duracao de execucao da busca: " << searchDurationsAverages.at(index) << "s " << endl;
-    cout << "Numero medio de copias de registro: " << dataMovementAverages.at(index) << endl;
+    cout << "Numero medio de movimentacoes de dados: " << dataMovementAverages.at(index) << endl;
     cout << "Numero medio de comparacoes na insercao: " << insertionComparisonsAverages.at(index) << endl;
     cout << "Numero medio de comparacoes na busca: " << searchComparisonsAverages.at(index) << endl;
     cout << endl;
 
     *outFile << "Tempo medio de duracao de execucao da insercao: " << insertionDurationsAverages.at(index) << "s " << endl;
     *outFile << "Tempo medio de duracao de execucao da busca: " << searchDurationsAverages.at(index) << "s " << endl;
-    *outFile << "Numero medio de copias de registro: " << dataMovementAverages.at(index) << endl;
+    *outFile << "Numero medio de movimentacoes de dados: " << dataMovementAverages.at(index) << endl;
     *outFile << "Numero medio de comparacoes na insercao: " << insertionComparisonsAverages.at(index) << endl;
     *outFile << "Numero medio de comparacoes na busca: " << searchComparisonsAverages.at(index) << endl;
     *outFile << endl;

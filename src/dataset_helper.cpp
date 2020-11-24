@@ -45,19 +45,34 @@ void DatasetHelper::readDatasetHash(Hash *hash, unsigned int size)
 void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size, vector<long long unsigned int> *keys, TreesStats *rbStats)
 {
     fstream dataset;
-
+    //abre e encontra posicao aleatoria no dataset
     openDataset(&dataset);
     setRandomPosition(&dataset);
+
+    int comparisons = 0;
+    int dataMovement = 0;
+    auto start = chrono::steady_clock::now();
 
     cout << "Inserindo na arvore:" << endl;
     cout << endl;
 
+    //realiza insercao de valores na arvore e no vetor de chaves, permitindo realizar a busca depois
     for (int i = 0; i < size; i++)
     {
         Book *book = readBooksDatasetLine(&dataset);
-        tree->insert(book);
+        tree->insert(book, &comparisons, &dataMovement); //inserir dentro do insert
         keys->push_back(book->id);
     }
+
+    auto end = chrono::steady_clock::now();
+    chrono::duration<double> totalDuration = end - start;
+
+    rbStats->insertionDurations.push_back(totalDuration.count());
+    cout << "Tempo de duracao de execucao na insercao: " << totalDuration.count() << "s" << endl;
+    rbStats->insertionComparisons.push_back(comparisons);
+    cout << "Numero de comparacoes realizadas na insercao: " << comparisons << endl;
+    rbStats->dataMovement.push_back(dataMovement);
+    cout << "Numero de movimentacoes de dados realizadas na insercao: " << dataMovement << endl;
 
     cout << endl;
     dataset.seekg(0, dataset.beg);

@@ -11,7 +11,18 @@ RBTree::RBTree()
 
 RBTree::~RBTree()
 {
-    this->root = NULL;
+    this->root = dispose(root);
+}
+
+RBTreeNode *RBTree::dispose(RBTreeNode *node)
+{
+    if (node != NULL)
+    {
+        node->setLeft(dispose(node->getLeft()));
+        node->setRight(dispose(node->getRight()));
+        node = NULL;
+    }
+    return NULL;
 }
 
 //checa se a árvore está ou não vazia
@@ -25,7 +36,7 @@ bool RBTree::isEmpty()
 }
 
 //insere novo nó com chave key
-void RBTree::insert(Book *book)
+void RBTree::insert(Book *book, int *comparisons, int *dataMovement)
 {
     cout << "Inserting book: " << book->id << endl;
     //checa se árvore está vazia, inserindo assim a raiz
@@ -43,6 +54,7 @@ void RBTree::insert(Book *book)
         while (parent != NULL)
         {
             //checa se posição correta é para a esquerda do nó atual
+            *comparisons = *comparisons + 1;
             if (parent->getKey() > book->id)
             {
                 if (parent->getLeft() == NULL)
@@ -73,12 +85,12 @@ void RBTree::insert(Book *book)
                 }
             }
         }
-        checkRBProperties(newNode);
+        checkRBProperties(newNode, comparisons, dataMovement);
     }
 }
 
 //checa propriedades da arvore sempre que um novo nó é inserido
-void RBTree::checkRBProperties(RBTreeNode *node)
+void RBTree::checkRBProperties(RBTreeNode *node, int *comparisons, int *dataMovement)
 {
     while (node->getParent()->getColor() == true)
     {
@@ -98,6 +110,7 @@ void RBTree::checkRBProperties(RBTreeNode *node)
                 node->getParent()->setColor(false);
                 uncle->setColor(false);
                 grandparent->setColor(true);
+                *comparisons = *comparisons + 1;
                 if (grandparent->getKey() != root->getKey())
                 {
                     node = grandparent;
@@ -109,13 +122,16 @@ void RBTree::checkRBProperties(RBTreeNode *node)
             }
             else if (node == grandparent->getLeft()->getRight())
             {
+                *dataMovement = *dataMovement + 1;
                 leftRotate(node->getParent());
             }
             else
             {
                 node->getParent()->setColor(false);
                 grandparent->setColor(true);
+                *dataMovement = *dataMovement + 1;
                 rightRotate(grandparent);
+                *comparisons = *comparisons + 1;
                 if (grandparent->getKey() != root->getKey())
                 {
                     node = grandparent;
@@ -139,6 +155,7 @@ void RBTree::checkRBProperties(RBTreeNode *node)
                 node->getParent()->setColor(false);
                 uncle->setColor(false);
                 grandparent->setColor(true);
+                *comparisons = *comparisons + 1;
                 if (grandparent->getKey() != root->getKey())
                 {
                     node = grandparent;
@@ -150,13 +167,16 @@ void RBTree::checkRBProperties(RBTreeNode *node)
             }
             else if (node == grandparent->getRight()->getLeft())
             {
+                *dataMovement = *dataMovement + 1;
                 rightRotate(node->getParent());
             }
             else
             {
                 node->getParent()->setColor(false);
                 grandparent->setColor(true);
+                *dataMovement = *dataMovement + 1;
                 leftRotate(grandparent);
+                *comparisons = *comparisons + 1;
                 if (grandparent->getKey() != root->getKey())
                 {
                     node = grandparent;
@@ -212,28 +232,28 @@ RBTreeNode *RBTree::search(long long unsigned int key, int *comparisons)
 //rotação para direita
 void RBTree::rightRotate(RBTreeNode *node)
 {
-    RBTreeNode *newNode = new RBTreeNode();
+    RBTreeNode *aux = new RBTreeNode();
     if (node->getLeft()->getRight())
     {
-        newNode->setLeft(node->getLeft()->getRight());
+        aux->setLeft(node->getLeft()->getRight());
     }
-    newNode->setBook(node->getBook());
-    newNode->setColor(node->getColor());
-    newNode->setRight(node->getRight());
+    aux->setBook(node->getBook());
+    aux->setColor(node->getColor());
+    aux->setRight(node->getRight());
 
     node->setBook(node->getLeft()->getBook());
     node->setColor(node->getLeft()->getColor());
-    node->setRight(newNode);
+    node->setRight(aux);
 
-    if (newNode->getLeft())
+    if (aux->getLeft())
     {
-        newNode->getLeft()->setParent(newNode);
+        aux->getLeft()->setParent(aux);
     }
-    if (newNode->getRight())
+    if (aux->getRight())
     {
-        newNode->getRight()->setParent(newNode);
+        aux->getRight()->setParent(aux);
     }
-    newNode->setParent(node);
+    aux->setParent(node);
 
     if (node->getLeft()->getLeft())
     {
@@ -253,28 +273,28 @@ void RBTree::rightRotate(RBTreeNode *node)
 //rotação para esquerda
 void RBTree::leftRotate(RBTreeNode *node)
 {
-    RBTreeNode *newNode = new RBTreeNode();
+    RBTreeNode *aux = new RBTreeNode();
     if (node->getRight()->getLeft())
     {
-        newNode->setRight(node->getRight()->getLeft());
+        aux->setRight(node->getRight()->getLeft());
     }
-    newNode->setBook(node->getBook());
-    newNode->setColor(node->getColor());
-    newNode->setLeft(node->getLeft());
+    aux->setBook(node->getBook());
+    aux->setColor(node->getColor());
+    aux->setLeft(node->getLeft());
 
     node->setBook(node->getRight()->getBook());
     node->setColor(node->getRight()->getColor());
-    node->setLeft(newNode);
+    node->setLeft(aux);
 
-    if (newNode->getLeft())
+    if (aux->getLeft())
     {
-        newNode->getLeft()->setParent(newNode);
+        aux->getLeft()->setParent(aux);
     }
-    if (newNode->getRight())
+    if (aux->getRight())
     {
-        newNode->getRight()->setParent(newNode);
+        aux->getRight()->setParent(aux);
     }
-    newNode->setParent(node);
+    aux->setParent(node);
 
     if (node->getRight()->getRight())
     {
