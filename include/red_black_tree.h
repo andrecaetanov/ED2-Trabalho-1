@@ -5,10 +5,7 @@ class RBTree
 private:
     RBTreeNode *root;
     bool isEmpty();
-    RBTreeNode *auxInsert(RBTreeNode *newNode, RBTreeNode *node);
-    int getHeight(RBTreeNode *node);
     void checkRBProperties(RBTreeNode *node);
-    RBTreeNode *findUncle(RBTreeNode *node);
 
 public:
     RBTree();
@@ -18,5 +15,6 @@ public:
     RBTreeNode *search(int key);
     void leftRotate(RBTreeNode *node);
     void rightRotate(RBTreeNode *node);
-    void print(RBTreeNode *node);
+    void print();
+    void printByLevel(RBTreeNode *node, int level);
 };

@@ -76,15 +76,3 @@ int RBTreeNode::getKey()
 {
     return this->key;
 }
-
-void RBTreeNode::changeColor()
-{
-    if (this->color == false)
-    {
-        color = true;
-    }
-    else
-    {
-        color = false;
-    }
-}

@@ -6,7 +6,6 @@ private:
     RBTreeNode *right;
     RBTreeNode *parent;
     bool color; //(false = black, true = red)
-    int height;
 
 public:
     RBTreeNode();
@@ -22,5 +21,4 @@ public:
     RBTreeNode *getParent();
     bool getColor();
     int getKey();
-    void changeColor();
 };
