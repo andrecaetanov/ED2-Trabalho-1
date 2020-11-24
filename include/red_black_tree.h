@@ -1,4 +1,5 @@
 #include "red_black_node.h"
+#pragma once
 
 class RBTree
 {
@@ -11,10 +12,11 @@ public:
     RBTree();
     ~RBTree();
     RBTreeNode *getRoot();
-    void insert(int key);
+    //void insert(int key);
+    void insert(Book *book);
     RBTreeNode *search(int key);
     void leftRotate(RBTreeNode *node);
     void rightRotate(RBTreeNode *node);
     void print();
-    void printByLevel(RBTreeNode *node, int level);
+    void printByRamification(RBTreeNode *node, int level);
 };

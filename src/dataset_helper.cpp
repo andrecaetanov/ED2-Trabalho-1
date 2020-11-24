@@ -40,6 +40,27 @@ void DatasetHelper::readDatasetHash(Hash *hash, unsigned int size)
     dataset.close();
 }
 
+void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size)
+{
+    fstream dataset;
+
+    openDataset(&dataset);
+    setRandomPosition(&dataset);
+
+    cout << "Inserindo na arvore:" << endl;
+    cout << endl;
+
+    for (int i = 0; i < size; i++)
+    {
+        Book *book = readBooksDatasetLine(&dataset);
+        tree->insert(book);
+    }
+
+    cout << endl;
+    dataset.seekg(0, dataset.beg);
+    dataset.close();
+}
+
 void DatasetHelper::openDataset(fstream *dataset)
 {
     dataset->open("dataset.csv");

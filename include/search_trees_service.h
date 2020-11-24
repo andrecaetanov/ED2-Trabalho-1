@@ -1,3 +1,5 @@
+#include <fstream>
+
 class TreeService
 {
 public:

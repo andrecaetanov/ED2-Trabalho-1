@@ -25,25 +25,30 @@ bool RBTree::isEmpty()
 }
 
 //insere novo nó com chave key
-void RBTree::insert(int key)
+//void RBTree::insert(int key)
+void RBTree::insert(Book *book)
 {
+    cout << "Inserting book: " << book->id << endl;
+    //cout << "Inserting key: " << key << endl;
     //checa se árvore está vazia, inserindo assim a raiz
     if (isEmpty())
     {
-        root = new RBTreeNode(key);
+        root = new RBTreeNode(book);
+        //root = new RBTreeNode(key);
     }
 
     //caso a árvore não esteja vazia, insere o nó em uma folha de acordo com sua chave
     else
     {
         RBTreeNode *parent = getRoot();
-        RBTreeNode *newNode = new RBTreeNode(key);
-
+        RBTreeNode *newNode = new RBTreeNode(book);
+        //RBTreeNode *newNode = new RBTreeNode(key);
         //procura pelo local correto de inserção a partir da raiz
         while (parent != NULL)
         {
             //checa se posição correta é para a esquerda do nó atual
-            if (parent->getKey() > key)
+            //if (parent->getKey() > key)
+            if (parent->getKey() > book->id)
             {
                 if (parent->getLeft() == NULL)
                 {
@@ -85,8 +90,10 @@ void RBTree::checkRBProperties(RBTreeNode *node)
         RBTreeNode *grandparent = node->getParent()->getParent();
         RBTreeNode *uncle = getRoot();
 
+        //realiza checagem se o pai é o filho da esquerda do avô
         if (node->getParent() == grandparent->getLeft())
         {
+            //se existe um filho a direita do avô, esse é o tio
             if (grandparent->getRight())
             {
                 uncle = grandparent->getRight();
@@ -124,8 +131,10 @@ void RBTree::checkRBProperties(RBTreeNode *node)
                 }
             }
         }
+        //realiza checagem se o pai é o filho da direita do avô
         else
         {
+            //se existe um filho a esquerda do avô, esse é o tio
             if (grandparent->getLeft())
             {
                 uncle = grandparent->getLeft();
@@ -207,14 +216,16 @@ void RBTree::rightRotate(RBTreeNode *node)
     {
         newNode->setLeft(node->getLeft()->getRight());
     }
-    newNode->setRight(node->getRight());
-    newNode->setKey(node->getKey());
+    newNode->setBook(node->getBook());
+    //newNode->setKey(node->getKey());
     newNode->setColor(node->getColor());
+    newNode->setRight(node->getRight());
 
-    node->setKey(node->getLeft()->getKey());
+    node->setBook(node->getLeft()->getBook());
+    //node->setKey(node->getLeft()->getKey());
     node->setColor(node->getLeft()->getColor());
-
     node->setRight(newNode);
+
     if (newNode->getLeft())
     {
         newNode->getLeft()->setParent(newNode);
@@ -248,12 +259,16 @@ void RBTree::leftRotate(RBTreeNode *node)
     {
         newNode->setRight(node->getRight()->getLeft());
     }
-    newNode->setLeft(node->getLeft());
-    newNode->setKey(node->getKey());
+    newNode->setBook(node->getBook());
+    //newNode->setKey(node->getKey());
     newNode->setColor(node->getColor());
-    node->setKey(node->getRight()->getKey());
+    newNode->setLeft(node->getLeft());
+
+    node->setBook(node->getRight()->getBook());
+    //node->setKey(node->getRight()->getKey());
     node->setColor(node->getRight()->getColor());
     node->setLeft(newNode);
+
     if (newNode->getLeft())
     {
         newNode->getLeft()->setParent(newNode);
@@ -288,15 +303,16 @@ RBTreeNode *RBTree::getRoot()
 //imprimir por nível, facilitando leitura
 void RBTree::print()
 {
-    printByLevel(root, 0);
+    printByRamification(root, 0);
 }
 
-void RBTree::printByLevel(RBTreeNode *node, int level)
+void RBTree::printByRamification(RBTreeNode *node, int level)
 {
     if (node != NULL)
     {
         cout << "Level " << level << ": ";
-        cout << node->getKey();
+        cout << node->getBook()->id;
+        //cout << node->getKey();
         if (node->getColor() == false)
         {
             cout << " - Black " << endl;
@@ -306,7 +322,7 @@ void RBTree::printByLevel(RBTreeNode *node, int level)
             cout << " - Red " << endl;
         }
 
-        printByLevel(node->getLeft(), level + 1);
-        printByLevel(node->getRight(), level + 1);
+        printByRamification(node->getLeft(), level + 1);
+        printByRamification(node->getRight(), level + 1);
     }
 }

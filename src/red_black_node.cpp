@@ -11,14 +11,24 @@ RBTreeNode::RBTreeNode()
     this->parent = NULL;
 }
 
-RBTreeNode::RBTreeNode(int key)
+RBTreeNode::RBTreeNode(Book *book)
 {
     this->left = NULL;
     this->right = NULL;
-    this->color = false;
-    this->key = key;
+    this->book = book;
+    this->key = book->id;
+    this->color = false; //(false == black)
     this->parent = NULL;
 }
+
+// RBTreeNode::RBTreeNode(int key)
+// {
+//     this->left = NULL;
+//     this->right = NULL;
+//     this->color = false;
+//     this->key = key;
+//     this->parent = NULL;
+// }
 
 RBTreeNode::~RBTreeNode()
 {
@@ -47,7 +57,7 @@ void RBTreeNode::setColor(bool color)
     this->color = color;
 }
 
-void RBTreeNode::setKey(int key)
+void RBTreeNode::setKey(long long unsigned int key)
 {
     this->key = key;
 }
@@ -72,7 +82,18 @@ bool RBTreeNode::getColor()
     return this->color;
 }
 
-int RBTreeNode::getKey()
+long long unsigned int RBTreeNode::getKey()
 {
     return this->key;
+}
+
+Book *RBTreeNode::getBook()
+{
+    return this->book;
+}
+
+void RBTreeNode::setBook(Book *book)
+{
+    this->book = book;
+    setKey(book->id);
 }

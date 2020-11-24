@@ -1,7 +1,11 @@
+#include "book.h"
+#pragma once
+
 class RBTreeNode
 {
 private:
-    int key; //book ID
+    Book *book;
+    long long unsigned int key; //book ID
     RBTreeNode *left;
     RBTreeNode *right;
     RBTreeNode *parent;
@@ -9,16 +13,19 @@ private:
 
 public:
     RBTreeNode();
-    RBTreeNode(int key);
+    RBTreeNode(Book *book);
+    //RBTreeNode(int key);
     ~RBTreeNode();
     void setLeft(RBTreeNode *node);
     void setRight(RBTreeNode *node);
     void setParent(RBTreeNode *node);
     void setColor(bool color);
-    void setKey(int key);
+    void setBook(Book *book);
+    void setKey(long long unsigned int key);
     RBTreeNode *getLeft();
     RBTreeNode *getRight();
     RBTreeNode *getParent();
     bool getColor();
-    int getKey();
+    long long unsigned int getKey();
+    Book *getBook();
 };
