@@ -19,5 +19,5 @@ public:
     void insert(T *data);
     T *search(int id);
     void read();
-    void destroy();
+    void dispose();
 };

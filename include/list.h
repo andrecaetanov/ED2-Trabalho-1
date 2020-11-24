@@ -10,5 +10,5 @@ public:
     List();
     Node<T> *getFirst();
     Node<T> *insert(T *entity);
-    void destroy();
+    void dispose();
 };

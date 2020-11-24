@@ -124,5 +124,21 @@ void Hash<T>::read()
     }
 }
 
+template <typename T>
+void Hash<T>::dispose()
+{
+    for (int i = 0; i < size; i++)
+    {
+        List<T> *entry = entries[i];
+        if (entry != NULL)
+        {
+            entry->dispose();
+        }
+    }
+
+    delete entries;
+    delete this;
+}
+
 template class Hash<Book>;
 template class Hash<Author>;

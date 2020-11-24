@@ -39,7 +39,7 @@ Node<T> *List<T>::insert(T *entity)
 }
 
 template <typename T>
-void List<T>::destroy()
+void List<T>::dispose()
 {
     Node<T> *node = getFirst();
     if (node != NULL)
@@ -51,6 +51,8 @@ void List<T>::destroy()
             node = nextNode;
         }
     }
+
+    delete this;
 }
 
 template class List<Book>;

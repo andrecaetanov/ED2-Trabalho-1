@@ -7,7 +7,7 @@
 class SortingService
 {
 public:
-    static void execute();
+    static void execute(int numberArrays);
 
 private:
     static void sort(vector<Book> *books, SortingStats *stats, int type);

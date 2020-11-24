@@ -60,13 +60,12 @@ void SortingService::sort(vector<Book> *books, SortingStats *stats, int type)
     cout << endl;
 }
 
-void SortingService::execute()
+void SortingService::execute(int numberArrays)
 {
     // Le o arquivo de entrada e guarda os valores de N em um array
     fstream inFile;
     ofstream outFile;
     int arraySize;
-    cout << "Abrindo arquivo entrada" << endl;
 
     inFile.open("entrada.txt");
     if (!inFile)
@@ -84,23 +83,20 @@ void SortingService::execute()
         inFile >> nArray[i];
     }
 
-    inFile.close();
-
     // Cria objetos para armazenar estatísticas de desempenho dos algoritmos de ordenação
     SortingStats *quickSortStats = new SortingStats();
     SortingStats *selectionSortStats = new SortingStats();
 
-    cout << "comeca criacao de vectors" << endl;
-
     // Execução
     for (int i = 0; i < arraySize; i++)
     {
-        for (int j = 0; j < NUMBER_ARRAYS; j++)
+        for (int j = 0; j < numberArrays; j++)
         {
             // Le o dataset e guarda N elementos em uma lista
             int n = nArray[i];
             vector<Book> books;
-            cout << "comeca ler dataset" << endl;
+            cout << "Lendo o dataset de livros e gravando em um vector..." << endl;
+            cout << endl;
             DatasetHelper::readDatasetVector(&books, n);
 
             // Copia vetor inicial para utilizar elementos em ambas as ordenações
@@ -145,5 +141,8 @@ void SortingService::execute()
         selectionSortStats->print(i, &outFile);
     }
 
+    inFile.close();
     outFile.close();
+    delete quickSortStats;
+    delete selectionSortStats;
 }
