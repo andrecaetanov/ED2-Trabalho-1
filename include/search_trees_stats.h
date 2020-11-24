@@ -8,12 +8,16 @@ class TreesStats
 {
 public:
     TreesStats();
-    vector<double> durations;
-    vector<int> comparisons;
-    vector<int> swaps;
-    vector<double> durationsAverages;
-    vector<int> comparisonsAverages;
-    vector<int> swapsAverages;
+    vector<double> insertionDurations;
+    vector<double> searchDurations;
+    vector<int> insertionComparisons;
+    vector<int> searchComparisons;
+    vector<int> dataMovement;
+    vector<double> insertionDurationsAverages;
+    vector<int> insertionComparisonsAverages;
+    vector<double> searchDurationsAverages;
+    vector<int> searchComparisonsAverages;
+    vector<int> dataMovementAverages;
     void clear();
     void calcAverages();
     void print(int index, ofstream *outFile);

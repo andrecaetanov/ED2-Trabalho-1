@@ -14,7 +14,6 @@ private:
 public:
     RBTreeNode();
     RBTreeNode(Book *book);
-    //RBTreeNode(int key);
     ~RBTreeNode();
     void setLeft(RBTreeNode *node);
     void setRight(RBTreeNode *node);

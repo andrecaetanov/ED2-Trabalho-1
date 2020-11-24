@@ -100,7 +100,7 @@ void SortingService::execute()
             // Le o dataset e guarda N elementos em uma lista
             int n = nArray[i];
             vector<Book> books;
-            cout << "comeca ler dataset" << endl;
+            cout << "comeca ler Dataset" << endl;
             DatasetHelper::readDatasetVector(&books, n);
 
             // Copia vetor inicial para utilizar elementos em ambas as ordenações

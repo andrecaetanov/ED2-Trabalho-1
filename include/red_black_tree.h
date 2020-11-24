@@ -12,9 +12,8 @@ public:
     RBTree();
     ~RBTree();
     RBTreeNode *getRoot();
-    //void insert(int key);
     void insert(Book *book);
-    RBTreeNode *search(int key);
+    RBTreeNode *search(long long unsigned int key, int *comparisons);
     void leftRotate(RBTreeNode *node);
     void rightRotate(RBTreeNode *node);
     void print();

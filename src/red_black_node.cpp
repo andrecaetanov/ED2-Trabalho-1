@@ -21,15 +21,6 @@ RBTreeNode::RBTreeNode(Book *book)
     this->parent = NULL;
 }
 
-// RBTreeNode::RBTreeNode(int key)
-// {
-//     this->left = NULL;
-//     this->right = NULL;
-//     this->color = false;
-//     this->key = key;
-//     this->parent = NULL;
-// }
-
 RBTreeNode::~RBTreeNode()
 {
     this->left = NULL;

@@ -25,16 +25,13 @@ bool RBTree::isEmpty()
 }
 
 //insere novo nó com chave key
-//void RBTree::insert(int key)
 void RBTree::insert(Book *book)
 {
     cout << "Inserting book: " << book->id << endl;
-    //cout << "Inserting key: " << key << endl;
     //checa se árvore está vazia, inserindo assim a raiz
     if (isEmpty())
     {
         root = new RBTreeNode(book);
-        //root = new RBTreeNode(key);
     }
 
     //caso a árvore não esteja vazia, insere o nó em uma folha de acordo com sua chave
@@ -42,12 +39,10 @@ void RBTree::insert(Book *book)
     {
         RBTreeNode *parent = getRoot();
         RBTreeNode *newNode = new RBTreeNode(book);
-        //RBTreeNode *newNode = new RBTreeNode(key);
         //procura pelo local correto de inserção a partir da raiz
         while (parent != NULL)
         {
             //checa se posição correta é para a esquerda do nó atual
-            //if (parent->getKey() > key)
             if (parent->getKey() > book->id)
             {
                 if (parent->getLeft() == NULL)
@@ -178,17 +173,19 @@ void RBTree::checkRBProperties(RBTreeNode *node)
 }
 
 //busca por um nó, retornando o próprio caso encontrado ou nulo
-RBTreeNode *RBTree::search(int key)
+RBTreeNode *RBTree::search(long long unsigned int key, int *comparisons)
 {
     RBTreeNode *node = this->root;
     if (node == NULL) //nao encontrou no na árvore, retorna null
     {
+        cout << "Node does not exist in the tree" << endl;
         return NULL;
     }
     else
     {
         while (node != NULL)
         {
+            *comparisons = *comparisons + 1;
             if (key == node->getKey())
             {
                 //No encontrado, retorna o mesmo
@@ -197,13 +194,17 @@ RBTreeNode *RBTree::search(int key)
             }
             else
             {
+                *comparisons = *comparisons + 1;
                 if (key < node->getKey())
+                {
                     node = node->getLeft();
+                }
                 else
+                {
                     node = node->getRight();
+                }
             }
         }
-        cout << "Node does not exist in the tree" << endl;
         return NULL;
     }
 }
@@ -217,12 +218,10 @@ void RBTree::rightRotate(RBTreeNode *node)
         newNode->setLeft(node->getLeft()->getRight());
     }
     newNode->setBook(node->getBook());
-    //newNode->setKey(node->getKey());
     newNode->setColor(node->getColor());
     newNode->setRight(node->getRight());
 
     node->setBook(node->getLeft()->getBook());
-    //node->setKey(node->getLeft()->getKey());
     node->setColor(node->getLeft()->getColor());
     node->setRight(newNode);
 
@@ -260,12 +259,10 @@ void RBTree::leftRotate(RBTreeNode *node)
         newNode->setRight(node->getRight()->getLeft());
     }
     newNode->setBook(node->getBook());
-    //newNode->setKey(node->getKey());
     newNode->setColor(node->getColor());
     newNode->setLeft(node->getLeft());
 
     node->setBook(node->getRight()->getBook());
-    //node->setKey(node->getRight()->getKey());
     node->setColor(node->getRight()->getColor());
     node->setLeft(newNode);
 
@@ -312,7 +309,6 @@ void RBTree::printByRamification(RBTreeNode *node, int level)
     {
         cout << "Level " << level << ": ";
         cout << node->getBook()->id;
-        //cout << node->getKey();
         if (node->getColor() == false)
         {
             cout << " - Black " << endl;

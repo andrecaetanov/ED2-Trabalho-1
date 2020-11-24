@@ -1,4 +1,5 @@
 #include "dataset_helper.h"
+#include <chrono>
 #include <sstream>
 
 using namespace std;
@@ -40,7 +41,8 @@ void DatasetHelper::readDatasetHash(Hash *hash, unsigned int size)
     dataset.close();
 }
 
-void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size)
+//Lê dataset, insere elementos do dataset na arvore e preenche vetor de chaves para busca
+void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size, vector<long long unsigned int> *keys, TreesStats *rbStats)
 {
     fstream dataset;
 
@@ -54,6 +56,7 @@ void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size)
     {
         Book *book = readBooksDatasetLine(&dataset);
         tree->insert(book);
+        keys->push_back(book->id);
     }
 
     cout << endl;
