@@ -8,7 +8,7 @@ void DatasetHelper::readDatasetVector(vector<Book> *books, unsigned int size)
 {
     fstream dataset;
 
-    openDataset(&dataset);
+    openDataset(&dataset, "dataset.csv");
     setRandomPosition(&dataset);
 
     cout << "Lista desordenada:" << endl;
@@ -24,21 +24,57 @@ void DatasetHelper::readDatasetVector(vector<Book> *books, unsigned int size)
     dataset.close();
 }
 
-void DatasetHelper::readDatasetHash(Hash *hash, unsigned int size)
+void DatasetHelper::readDatasetHash(Hash<Book> *booksHash, Hash<Author> *authorsHash, vector<Author> *authorsVector, unsigned int size)
 {
-    fstream dataset;
+    fstream booksDataset;
+    fstream authorsDataset;
 
-    openDataset(&dataset);
-    setRandomPosition(&dataset);
+    openDataset(&booksDataset, "dataset.csv");
+    setRandomPosition(&booksDataset);
 
+    // Le o dataset e insere os N livros na hash de livros
+    cout << "Lendo o dataset de livros e inserindo N livros em uma hash..." << endl;
     for (int i = 0; i < size; i++)
     {
-        Book *book = readBooksDatasetLine(&dataset);
-        hash->insert(book);
+        Book *book = readBooksDatasetLine(&booksDataset);
+        booksHash->insert(book);
+
+        // Cria um autor com apenas o id e salva na tabela hash de autores
+        for (int authorId : book->authors)
+        {
+            Author *author = new Author();
+            author->id = authorId;
+            authorsHash->insert(author);
+        }
     }
 
-    dataset.seekg(0, dataset.beg);
-    dataset.close();
+    openDataset(&authorsDataset, "authors-dataset.csv");
+
+    // Salta a primeira linha do dataset
+    string line;
+    getline(authorsDataset, line);
+
+    cout << "Lendo o dataset de autores e salvando os nomes dos autores dos livros em uma hash..." << endl;
+    // Le linha por linha do dataset de autores e verifica se o id de cada autor esta contido na hash
+    // Se sim, salva o nome do autor na hash e o autor no vetor de autores que irá ser ordenado
+    while (!authorsDataset.eof())
+    {
+        unsigned long long int authorId;
+        size_t lastPosition = 0;
+
+        getline(authorsDataset, line);
+        readIntAttribute(&line, &authorId, &lastPosition);
+
+        Author *author = authorsHash->search(authorId);
+        if (author != NULL)
+        {
+            readStringAttribute(&line, &author->name, &lastPosition);
+            authorsVector->push_back(*author);
+        }
+    }
+
+    booksDataset.close();
+    authorsDataset.close();
 }
 
 //Lê dataset, insere elementos do dataset na arvore e preenche vetor de chaves para busca
@@ -46,7 +82,7 @@ void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size, vector<lo
 {
     fstream dataset;
     //abre e encontra posicao aleatoria no dataset
-    openDataset(&dataset);
+    openDataset(&dataset, "dataset.csv");
     setRandomPosition(&dataset);
 
     int comparisons = 0;
@@ -79,9 +115,9 @@ void DatasetHelper::readDatasetRBTree(RBTree *tree, unsigned int size, vector<lo
     dataset.close();
 }
 
-void DatasetHelper::openDataset(fstream *dataset)
+void DatasetHelper::openDataset(fstream *dataset, string fileName)
 {
-    dataset->open("dataset.csv");
+    dataset->open(fileName);
     if (!dataset)
     {
         cout << "Nao foi possivel abrir o dataset." << endl;
@@ -102,6 +138,8 @@ void DatasetHelper::setRandomPosition(fstream *dataset)
 
 unsigned long long int DatasetHelper::getDatasetLenght(fstream *dataset)
 {
+    // Salta ate o final do dataset, verifica em qual posicao esta para verificar o tamanho do dataset
+    // E retorna para o inicio do dataset
     dataset->seekg(0, dataset->end);
     unsigned long long int datasetLenght = dataset->tellg();
     dataset->seekg(0, dataset->beg);

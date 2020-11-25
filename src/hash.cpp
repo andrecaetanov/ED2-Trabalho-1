@@ -1,17 +1,24 @@
 #include "hash.h"
 #include <iostream>
 #include "math.h"
+#include "book.h"
+#include "author.h"
 
 using namespace std;
 
-Hash::Hash(int size)
+template <typename T>
+Hash<T>::Hash()
 {
-    vector<vector<Entity>> entries(size);
-    this->entries = entries;
-    this->size = size;
 }
 
-int Hash::hashFunction(unsigned long long int k)
+template <typename T>
+int Hash<T>::getSize()
+{
+    return size;
+}
+
+template <typename T>
+int Hash<T>::hashFunction(unsigned long long int k)
 {
     double a = (sqrt(5) - 1) / 2;
     long double ka = k * a;
@@ -20,34 +27,118 @@ int Hash::hashFunction(unsigned long long int k)
     return hash;
 }
 
-void Hash::insert(Entity *data)
+template <typename T>
+void Hash<T>::create(int size)
+{
+    entries = new List<T> *[size];
+
+    for (int i = 0; i < size; i++)
+    {
+        entries[i] = NULL;
+    }
+
+    this->size = size;
+}
+
+template <typename T>
+void Hash<T>::insert(T *data)
 {
     int hash = hashFunction(data->id);
 
-    for (Entity entity : this->entries[hash])
+    if (entries[hash] == NULL)
     {
-        if (entity.id == data->id)
+        entries[hash] = new List<T>();
+    }
+    else
+    {
+        T *entity = search(data->id);
+        if (entity != NULL)
         {
+            entity->frequency++;
             return;
         }
     }
 
-    this->entries[hash].push_back(*data);
+    Node<T> *node = entries[hash]->insert(data);
+    data->frequency++;
 }
 
-void Hash::read()
+template <typename T>
+T *Hash<T>::search(int id)
 {
-    cout << "Hash of size " << this->size << endl;
+    int hash = hashFunction(id);
 
-    for (int i = 0; i < this->size; i++)
+    if (entries[hash] != NULL)
+    {
+        Node<T> *node = entries[hash]->getFirst();
+
+        if (node != NULL)
+        {
+            T *entity = node->entity;
+            if (entity->id == id)
+            {
+                return entity;
+            }
+
+            while (node->next != NULL)
+            {
+                node = node->next;
+
+                T *entity = node->entity;
+                if (entity->id == id)
+                {
+                    return entity;
+                }
+            }
+        }
+    }
+
+    return NULL;
+}
+
+template <typename T>
+void Hash<T>::read()
+{
+    cout << "Hash de tamanho " << size << endl;
+    for (int i = 0; i < size; i++)
     {
         cout << i << ":";
 
-        for (Entity entity : this->entries[i])
+        List<T> *entry = entries[i];
+        if (entry != NULL)
         {
-            cout << " " << entity.id;
+            Node<T> *node = entry->getFirst();
+            if (node != NULL)
+            {
+                cout << " " << node->entity->id;
+
+                while (node->next != NULL)
+                {
+                    node = node->next;
+                    cout << " " << node->entity->id;
+                }
+            }
         }
 
         cout << endl;
     }
 }
+
+template <typename T>
+void Hash<T>::dispose()
+{
+    for (int i = 0; i < size; i++)
+    {
+        List<T> *entry = entries[i];
+        if (entry != NULL)
+        {
+            entry->dispose();
+        }
+    }
+
+    delete entries;
+    delete this;
+}
+
+template class Hash<Book>;
+template class Hash<Author>;

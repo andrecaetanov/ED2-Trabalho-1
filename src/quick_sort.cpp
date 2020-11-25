@@ -1,45 +1,53 @@
 #include <time.h>
 #include "quick_sort.h"
+#include "book.h"
+#include "author.h"
 
-void QuickSort::swap(Book *bookA, Book *bookB)
+template <typename T>
+void QuickSort<T>::swap(T *entityA, T *entityB)
 {
-    Book temp = *bookA;
-    *bookA = *bookB;
-    *bookB = temp;
+    T temp = *entityA;
+    *entityA = *entityB;
+    *entityB = temp;
 }
 
-int QuickSort::partition(vector<Book> *books, int begin, int end, int *swaps, int *comparisons)
+template <typename T>
+int QuickSort<T>::partition(vector<T> *entities, int begin, int end, int *swaps, int *comparisons)
 {
     srand(time(NULL));
     int random = begin + rand() % (end - begin);
-    swap(&books->at(random), &books->at(end));
+    swap(&entities->at(random), &entities->at(end));
 
-    Book pivot = books->at(end);
+    T pivot = entities->at(end);
     int i = begin - 1;
 
     for (int j = begin; j <= end - 1; j++)
     {
-        if (books->at(j).title < pivot.title)
+        if (entities->at(j).getSortingParameter() < pivot.getSortingParameter())
         {
             i++;
-            swap(&books->at(i), &books->at(j));
+            swap(&entities->at(i), &entities->at(j));
             *swaps = *swaps + 1;
             *comparisons = *comparisons + 1;
         }
     }
 
-    swap(&books->at(i + 1), &books->at(end));
+    swap(&entities->at(i + 1), &entities->at(end));
     *swaps = *swaps + 1;
 
     return i + 1;
 }
 
-void QuickSort::sort(vector<Book> *books, int begin, int end, int *swaps, int *comparisons)
+template <typename T>
+void QuickSort<T>::sort(vector<T> *entities, int begin, int end, int *swaps, int *comparisons)
 {
     if (begin < end)
     {
-        int pi = partition(books, begin, end, swaps, comparisons);
-        sort(books, begin, pi - 1, swaps, comparisons);
-        sort(books, pi + 1, end, swaps, comparisons);
+        int pi = partition(entities, begin, end, swaps, comparisons);
+        sort(entities, begin, pi - 1, swaps, comparisons);
+        sort(entities, pi + 1, end, swaps, comparisons);
     }
 }
+
+template class QuickSort<Book>;
+template class QuickSort<Author>;

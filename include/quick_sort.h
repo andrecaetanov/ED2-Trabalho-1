@@ -1,13 +1,13 @@
 #include <vector>
-#include "book.h"
 #include "sorting_stats.h"
 
+template <typename T>
 class QuickSort
 {
 private:
-    static void swap(Book *a, Book *b);
-    static int partition(vector<Book> *books, int begin, int end, int *swaps, int *comparisons);
+    static void swap(T *a, T *b);
+    static int partition(vector<T> *entities, int begin, int end, int *swaps, int *comparisons);
 
 public:
-    static void sort(vector<Book> *books, int begin, int end, int *swaps, int *comparisons);
+    static void sort(vector<T> *entities, int begin, int end, int *swaps, int *comparisons);
 };

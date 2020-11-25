@@ -44,3 +44,10 @@
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,vscode
+/.vscode/launch.json
+/.vscode/settings.json
+/.vscode/tasks.json
+/authors-dataset.csv
+/dataset.csv
+/entrada.txt
+/saida.txt

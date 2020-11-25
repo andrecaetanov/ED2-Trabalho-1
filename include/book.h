@@ -18,4 +18,5 @@ public:
     string ratingAvg;
     string ratingCount;
     string title;
+    string getSortingParameter();
 };
