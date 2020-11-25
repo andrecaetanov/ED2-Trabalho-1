@@ -20,5 +20,6 @@ public:
     vector<int> dataMovementAverages;
     void clear();
     void calcAverages();
-    void print(int index, ofstream *outFile);
+    void printInsertionStats(int index, ofstream *outFile);
+    void printSearchStats(int index, ofstream *outFile);
 };

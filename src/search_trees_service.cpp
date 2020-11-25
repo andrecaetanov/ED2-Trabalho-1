@@ -29,7 +29,7 @@ void TreeService::execute()
 {
     //Leitura do arquivo de entrada
     fstream inFile;
-    ofstream outFile;
+    ofstream insertionOutFile, searchOutFile;
     int arraySize;
 
     cout << "Abrindo arquivo de entrada:" << endl;
@@ -81,17 +81,22 @@ void TreeService::execute()
     //garantir que ta funcionando os stats
     //fazer o output file
     // Imprime no prompt e registra no arquivo de saida as estatisticas de desempenho
-    outFile.open("saidaTree.txt");
+    insertionOutFile.open("saidaInsercao.txt");
+    searchOutFile.open("saidaBusca.txt");
 
     cout << "Estatisticas gerais" << endl;
     cout << endl;
-    outFile << "Estatisticas gerais" << endl;
-    outFile << endl;
+    insertionOutFile << "Estatisticas gerais de Insercao" << endl;
+    insertionOutFile << endl;
+    searchOutFile << "Estatisticas gerais de Busca" << endl;
+    searchOutFile << endl;
 
     for (int i = 0; i < arraySize; i++)
     {
-        cout << "Arvore Vermelha-Preta - " << nArray[i] << " chaves: " << endl;
-        outFile << "QArvore Vermelha-Preta - " << nArray[i] << " chaves: " << endl;
-        rbStats->print(i, &outFile);
+        cout << "ARVORE VERMELHA-PRETA - " << nArray[i] << " CHAVES " << endl;
+        insertionOutFile << "ARVORE VERMELHA-PRETA - " << nArray[i] << " CHAVES " << endl;
+        searchOutFile << "ARVORE VERMELHA-PRETA - " << nArray[i] << " CHAVES " << endl;
+        rbStats->printInsertionStats(i, &insertionOutFile);
+        rbStats->printSearchStats(i, &searchOutFile);
     }
 }
