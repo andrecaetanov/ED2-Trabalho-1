@@ -20,11 +20,7 @@ int Hash<T>::getSize()
 template <typename T>
 int Hash<T>::hashFunction(unsigned long long int k)
 {
-    double a = (sqrt(5) - 1) / 2;
-    long double ka = k * a;
-    double kamod = modf(ka, &kamod);
-    int hash = (int)floor(this->size * kamod);
-    return hash;
+    return k % size;
 }
 
 template <typename T>
