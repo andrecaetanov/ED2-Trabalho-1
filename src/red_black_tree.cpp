@@ -9,6 +9,7 @@ RBTree::RBTree()
     this->root = NULL;
 }
 
+//destrutor com liberacao da arvore
 RBTree::~RBTree()
 {
     this->root = dispose(root);
@@ -105,12 +106,14 @@ void RBTree::checkRBProperties(RBTreeNode *node, int *comparisons, int *dataMove
             {
                 uncle = grandparent->getRight();
             }
+            //caso a cor do pai e do tio sejam vermelhos, altera as cores
             if (uncle->getColor() == true)
             {
                 node->getParent()->setColor(false);
                 uncle->setColor(false);
                 grandparent->setColor(true);
                 *comparisons = *comparisons + 1;
+                //verifica proximidade da raiz
                 if (grandparent->getKey() != root->getKey())
                 {
                     node = grandparent;
@@ -120,6 +123,8 @@ void RBTree::checkRBProperties(RBTreeNode *node, int *comparisons, int *dataMove
                     break;
                 }
             }
+            //caso a cor do tio não seja vermelha, realiza rotação de acordo com as propriedades
+            //se o no estiver na subarvore esquerda do avo
             else if (node == grandparent->getLeft()->getRight())
             {
                 *dataMovement = *dataMovement + 1;
@@ -203,6 +208,7 @@ RBTreeNode *RBTree::search(long long unsigned int key, int *comparisons)
     }
     else
     {
+        //continua percorrendo enquanto não encontrou nó
         while (node != NULL)
         {
             *comparisons = *comparisons + 1;

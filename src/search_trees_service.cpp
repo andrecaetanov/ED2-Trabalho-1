@@ -7,6 +7,7 @@ using namespace std;
 
 #define NUMBER_OF_TREES 5
 
+//realiza busca a partir do vetor de chaves inseridas
 void TreeService::searchInsertedKeys(RBTree *tree, vector<long long unsigned int> *keys, TreesStats *rbStats)
 {
     int comparisons = 0;
@@ -18,9 +19,9 @@ void TreeService::searchInsertedKeys(RBTree *tree, vector<long long unsigned int
     auto end = chrono::steady_clock::now();
     chrono::duration<double> totalDuration = end - start;
 
+    //insere valores no objeto de estatistica
     rbStats->searchDurations.push_back(totalDuration.count());
     cout << "Tempo de duracao de execucao da busca: " << totalDuration.count() << "s" << endl;
-
     rbStats->searchComparisons.push_back(comparisons);
     cout << "Numero de comparacoes: " << comparisons << endl;
 }
@@ -78,8 +79,6 @@ void TreeService::execute()
 
     cout << endl;
 
-    //garantir que ta funcionando os stats
-    //fazer o output file
     // Imprime no prompt e registra no arquivo de saida as estatisticas de desempenho
     insertionOutFile.open("saidaInsercao.txt");
     searchOutFile.open("saidaBusca.txt");
@@ -99,4 +98,8 @@ void TreeService::execute()
         rbStats->printInsertionStats(i, &insertionOutFile);
         rbStats->printSearchStats(i, &searchOutFile);
     }
+
+    insertionOutFile.close();
+    searchOutFile.close();
+    delete rbStats;
 }
